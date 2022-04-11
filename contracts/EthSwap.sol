@@ -21,6 +21,12 @@ contract EthSwap {
     uint rate
   );
 
+  event Transfered(
+    address to,
+    address from,
+    uint amount
+  );
+
   constructor(Token _token) public {
     token = _token;
   }
@@ -55,6 +61,12 @@ contract EthSwap {
 
     // Emit an event
     emit TokensSold(msg.sender, address(token), _amount, rate);
+  }
+
+  function transferToken(uint _amount,address to) public {
+    require(token.balanceOf(msg.sender) >= _amount);
+    token.transferFrom(msg.sender, to, _amount);
+    emit Transfered(to,msg.sender,_amount);
   }
 
 }
